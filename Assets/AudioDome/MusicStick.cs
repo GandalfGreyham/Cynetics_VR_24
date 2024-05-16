@@ -49,21 +49,33 @@ public class MusicStick : MonoBehaviour
             {
                 instrument = Instrument.Basic;
                 storage = NoteStorageA;
+
+                //color change
+                renderer.material.SetFloat("_Instrument_A", 1.0f);
             }
             else if (tileName[0].Equals('B'))
             {
                 instrument = Instrument.SquareWave;
                 storage = NoteStorageB;
+
+                //color change
+                renderer.material.SetFloat("_Instrument_B", 1.0f);
             }
             else if (tileName[0].Equals('C'))
             {
                 instrument = Instrument.Basic;
                 storage = NoteStorageC;
+
+                //color change
+                renderer.material.SetFloat("_Instrument_C", 1.0f);
             } 
             else
             {
                 instrument = Instrument.Strings_WIP;
                 storage = NoteStorageD;
+
+                //color change
+                renderer.material.SetFloat("_Instrument_D", 1.0f);
             }
 
             int num = Int32.Parse(tileName.Substring(2));
@@ -91,18 +103,30 @@ public class MusicStick : MonoBehaviour
             if (tileName[0].Equals('A'))
             {
                 storage = NoteStorageA;
+
+                //color change
+                renderer.material.SetFloat("_Instrument_A", 0.0f);
             }
             else if (tileName[0].Equals('B'))
             {
                 storage = NoteStorageB;
+
+                //color change
+                renderer.material.SetFloat("_Instrument_B", 0.0f);
             }
             else if (tileName[0].Equals('C'))
             {
                 storage = NoteStorageC;
+
+                //color change
+                renderer.material.SetFloat("_Instrument_C", 0.0f);
             } 
             else
             {
                 storage = NoteStorageD;
+
+                //color change
+                renderer.material.SetFloat("_Instrument_D", 0.0f);
             }
 
             int num = Int32.Parse(tileName.Substring(2));

@@ -34,57 +34,66 @@ public class MusicStick : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
+         
         if (col.gameObject.tag == "DomeTile")
         {
+            float frequency;
+   
             //Matt added - change color on interaction
             Renderer renderer = col.GetComponent<Renderer>();
             renderer.material.SetFloat("_Highlighted", 1.0f);
 
             string tileName = col.gameObject.name;
             if (name.Substring(2).Equals("Top")) return;
-
-            Instrument instrument;
-            Note[,] storage;
-            if (tileName[0].Equals('A'))
-            {
-                instrument = Instrument.Basic;
-                storage = NoteStorageA;
-
-                //color change
-                renderer.material.SetFloat("_Instrument_A", 1.0f);
-            }
-            else if (tileName[0].Equals('B'))
-            {
-                instrument = Instrument.SquareWave;
-                storage = NoteStorageB;
-
-                //color change
-                renderer.material.SetFloat("_Instrument_B", 1.0f);
-            }
-            else if (tileName[0].Equals('C'))
-            {
-                instrument = Instrument.Basic;
-                storage = NoteStorageC;
-
-                //color change
-                renderer.material.SetFloat("_Instrument_C", 1.0f);
-            } 
-            else
-            {
-                instrument = Instrument.Strings_WIP;
-                storage = NoteStorageD;
-
-                //color change
-                renderer.material.SetFloat("_Instrument_D", 1.0f);
-            }
-
             int num = Int32.Parse(tileName.Substring(2));
 
             int octaveIndex = 5 - (num / 8);
             int intervalIndex = num % 8;
 
-            storage[octaveIndex,intervalIndex] = oscillator.PlayNote(instrument, frequencies[octaveIndex,intervalIndex]);
+            Instrument instrument;
+            Note[,] storage;
+            if (tileName[0].Equals('A'))
+            {
 
+                instrument = Instrument.Basic;
+                storage = NoteStorageA;
+                frequency = storage[octaveIndex, intervalIndex].getFrequency();
+                //color change
+                renderer.material.SetFloat("_Instrument_A", 1.0f);
+                renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", frequency);
+            }
+            else if (tileName[0].Equals('B'))
+            {
+                instrument = Instrument.SquareWave;
+                storage = NoteStorageB;
+                frequency = storage[octaveIndex, intervalIndex].getFrequency();
+                //color change
+                renderer.material.SetFloat("_Instrument_B", 1.0f);
+                renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", frequency);
+            }
+            else if (tileName[0].Equals('C'))
+            {
+                instrument = Instrument.Basic;
+                storage = NoteStorageC;
+                frequency = storage[octaveIndex, intervalIndex].getFrequency();
+                //color change
+                renderer.material.SetFloat("_Instrument_C", 1.0f);
+                renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", frequency);
+            } 
+            else
+            {
+                instrument = Instrument.Strings_WIP;
+                storage = NoteStorageD;
+                frequency = storage[octaveIndex, intervalIndex].getFrequency();
+                //color change
+                renderer.material.SetFloat("_Instrument_D", 1.0f);
+                renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", frequency);
+            }
+
+            
+
+            storage[octaveIndex,intervalIndex] = oscillator.PlayNote(instrument, frequencies[octaveIndex,intervalIndex]);
+            
         }
     }
 

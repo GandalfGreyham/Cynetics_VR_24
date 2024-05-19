@@ -4,7 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Matt_Wetlands_Soundscape.unity
+    guid: a8bd31ebf4e2c419bb8d860a4da8f402
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 40237880103d14c3ea690e597fc68d95, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: d24cd8181391942369f22988e99b4622, type: 2}

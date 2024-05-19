@@ -62,37 +62,41 @@ public class MusicStick : MonoBehaviour
 
                 instrument = instrumentA;
                 storage = NoteStorageA;
-                frequency = storage[octaveIndex, intervalIndex].getFrequency();
+                frequency = frequencies[octaveIndex, intervalIndex]/2092;
                 //color change
                 renderer.material.SetFloat("_Instrument_A", 1.0f);
                 renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", frequency);
+                Debug.Log(frequency);
             }
             else if (tileName[0].Equals('B'))
             {
                 instrument = instrumentB;
                 storage = NoteStorageB;
-                frequency = storage[octaveIndex, intervalIndex].getFrequency();
+                frequency = frequencies[octaveIndex, intervalIndex]/2092;
                 //color change
                 renderer.material.SetFloat("_Instrument_B", 1.0f);
                 renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", frequency);
+                Debug.Log(frequency);
             }
             else if (tileName[0].Equals('C'))
             {
                 instrument = instrumentC;
                 storage = NoteStorageC;
-                frequency = storage[octaveIndex, intervalIndex].getFrequency();
+                frequency = frequencies[octaveIndex, intervalIndex]/2092;
                 //color change
                 renderer.material.SetFloat("_Instrument_C", 1.0f);
                 renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", frequency);
+                Debug.Log(frequency);
             } 
             else
             {
                 instrument = instrumentD;
                 storage = NoteStorageD;
-                frequency = storage[octaveIndex, intervalIndex].getFrequency();
+                frequency = frequencies[octaveIndex, intervalIndex]/2092;
                 //color change
                 renderer.material.SetFloat("_Instrument_D", 1.0f);
                 renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", frequency);
+                Debug.Log(frequency);
             }
 
             

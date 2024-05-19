@@ -15,10 +15,10 @@ public class MusicStick : MonoBehaviour
     public Note[,] NoteStorageD = new Note[6,8];
     private float[,] frequencies;
 
-    public float instrumentA
-    public float instrumentB
-    public float instrumentC
-    public float instrumentD
+    public Instrument instrumentA;
+    public Instrument instrumentB;
+    public Instrument instrumentC;
+    public Instrument instrumentD;
 
     public float[,] NoteMatrix(float baseFrequency, int octaves)
     {

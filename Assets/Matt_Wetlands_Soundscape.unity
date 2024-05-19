@@ -1731,6 +1731,26 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 57cb25ced47bf49c6b212a28a182bbf6, type: 2}
+    - target: {fileID: 5164732989287809045, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: KeyboardInstrument
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: instrumentA
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: instrumentB
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: instrumentC
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: instrumentD
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5164732989287809048, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
       propertyPath: m_Name
       value: MusicStick (1)
@@ -9920,6 +9940,26 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 57cb25ced47bf49c6b212a28a182bbf6, type: 2}
     - target: {fileID: 5164732989287809045, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
       propertyPath: KeyboardOn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164732989287809045, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: KeyboardInstrument
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: instrumentA
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: instrumentB
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: instrumentC
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: instrumentD
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5164732989287809048, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}

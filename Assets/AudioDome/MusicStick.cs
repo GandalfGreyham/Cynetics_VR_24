@@ -20,6 +20,9 @@ public class MusicStick : MonoBehaviour
     public Instrument instrumentC;
     public Instrument instrumentD;
 
+    float colorOctave;
+    float colorInterval;
+
     public float[,] NoteMatrix(float baseFrequency, int octaves)
     {
         float[,] matrix = new float[octaves,8];
@@ -43,7 +46,8 @@ public class MusicStick : MonoBehaviour
         if (col.gameObject.tag == "DomeTile")
         {
             float frequency;
-   
+            
+
             //Matt added - change color on interaction
             Renderer renderer = col.GetComponent<Renderer>();
             renderer.material.SetFloat("_Highlighted", 1.0f);
@@ -54,6 +58,9 @@ public class MusicStick : MonoBehaviour
 
             int octaveIndex = 5 - (num / 8);
             int intervalIndex = num % 8;
+            colorOctave = octaveIndex / 5f;
+            colorInterval = intervalIndex / 7f;
+
 
             Instrument instrument;
             Note[,] storage;
@@ -62,41 +69,54 @@ public class MusicStick : MonoBehaviour
 
                 instrument = instrumentA;
                 storage = NoteStorageA;
-                frequency = frequencies[octaveIndex, intervalIndex]/2092;
+                frequency = frequencies[octaveIndex, intervalIndex];///2092;
+             
                 //color change
                 renderer.material.SetFloat("_Instrument_A", 1.0f);
-                renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", frequency);
-                Debug.Log(frequency);
+                renderer.material.SetFloat("_OctaveRow", colorOctave);
+                renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", colorInterval);
+                Debug.Log(colorOctave);
+                Debug.Log(colorInterval);
             }
             else if (tileName[0].Equals('B'))
             {
                 instrument = instrumentB;
                 storage = NoteStorageB;
-                frequency = frequencies[octaveIndex, intervalIndex]/2092;
+                frequency = frequencies[octaveIndex, intervalIndex];///2092;
+              
                 //color change
                 renderer.material.SetFloat("_Instrument_B", 1.0f);
-                renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", frequency);
-                Debug.Log(frequency);
+                renderer.material.SetFloat("_OctaveRow", colorOctave);
+                renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", colorInterval);
+                Debug.Log(colorOctave);
+                Debug.Log(colorInterval);
             }
             else if (tileName[0].Equals('C'))
             {
                 instrument = instrumentC;
                 storage = NoteStorageC;
-                frequency = frequencies[octaveIndex, intervalIndex]/2092;
+                frequency = frequencies[octaveIndex, intervalIndex];///2092;
+             
                 //color change
                 renderer.material.SetFloat("_Instrument_C", 1.0f);
-                renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", frequency);
-                Debug.Log(frequency);
+                renderer.material.SetFloat("_OctaveRow", colorOctave);
+                renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", colorInterval);
+                Debug.Log(colorOctave);
+                Debug.Log(colorInterval);
             } 
             else
             {
                 instrument = instrumentD;
                 storage = NoteStorageD;
-                frequency = frequencies[octaveIndex, intervalIndex]/2092;
+                frequency = frequencies[octaveIndex, intervalIndex];///2092;
+  
                 //color change
                 renderer.material.SetFloat("_Instrument_D", 1.0f);
-                renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", frequency);
-                Debug.Log(frequency);
+                renderer.material.SetFloat("_OctaveRow", colorOctave);
+                renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", colorInterval);
+                
+                Debug.Log(colorOctave);
+                Debug.Log(colorInterval);
             }
 
             

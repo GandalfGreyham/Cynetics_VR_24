@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,40 +8,76 @@ using UnityEngine.Timeline;
 
 public enum Instrument
 {
-    Basic,
-    SquareWave,
-    Strings_WIP
+    Vibrophone,
+    SquareSynth,
+    Strings,
+    Flute,
+    Organ,
+    TriangleTest
 }
 
 public class InstrumentData
 {
     public Waveform waveform;
+    public WaveformMix waveformMix;
     public ADSR adsr;
     public float[] harmonicStrengths;
+    public float volumeMultiplier;
 
     public InstrumentData(Instrument instrument)
     {
         switch (instrument)
         {
-            case Instrument.Basic:
+            case Instrument.Vibrophone:
             {
                 waveform = Waveform.Sin;
+                waveformMix = new WaveformMix(1f,0f,0f);
                 adsr = new ADSR();
-                harmonicStrengths = new float[] {1.0f,0.2f,0.1f,0.05f,0.02f,0.01f,0.005f,0.002f,0.001f};
+                harmonicStrengths = new float[] {1.0f};
+                volumeMultiplier = 2f;
                 break;
             }
-            case Instrument.SquareWave:
+            case Instrument.SquareSynth:
             {
                 waveform = Waveform.Square;
+                waveformMix = new WaveformMix(0.2f,0.8f,0f);
                 adsr = new ADSR();
-                harmonicStrengths = new float[] {1.0f,0.3f,0.05f};
+                harmonicStrengths = new float[] {1.0f};
+                volumeMultiplier = 0.9f;
                 break;
             }
-            case Instrument.Strings_WIP:
+            case Instrument.Strings:
             {
                 waveform = Waveform.Sawtooth;
+                waveformMix = new WaveformMix(0.5f,0f,0.5f);
                 adsr = new ADSR(0.2f,0.2f,0.6f,0.5f);
-                harmonicStrengths = new float[] {1.0f,0.3f,0.2f,0.1f,0.05f,0.03f,0.01f,0.005f,0.003f,0.002f,0.002f};
+                harmonicStrengths = new float[] {1.0f,0.2f,0.3f};
+                volumeMultiplier = 1;
+                break;
+            }
+            case Instrument.TriangleTest:
+            {
+                waveform = Waveform.Triangle;
+                waveformMix = new WaveformMix(1f,0f,0f);
+                adsr = new ADSR();
+                harmonicStrengths = new float[] {1.0f,0.3f,0.05f};
+                volumeMultiplier = 1;
+                break;
+            }
+            case Instrument.Flute:
+            {
+                waveformMix = new WaveformMix(1.2f,0f,0f);
+                adsr = new ADSR(0.25f,0.2f,0.7f,0.5f);
+                harmonicStrengths = new float[] {1.0f,0.1f,0.2f,0.1f};
+                volumeMultiplier = 1.2f;
+                break;
+            }
+            case Instrument.Organ:
+            {
+                waveformMix = new WaveformMix(0.9f,0f,0.1f);
+                adsr = new ADSR();
+                harmonicStrengths = new float[] {1.0f,0.2f,0.1f,0.3f};
+                volumeMultiplier = 1;
                 break;
             }
         }
@@ -53,6 +90,20 @@ public enum Waveform
     Square,
     Triangle,
     Sawtooth
+}
+
+public class WaveformMix
+{
+    public float sin;
+    public float square;
+    public float sawtooth;
+
+    public WaveformMix(float sin, float square, float sawtooth)
+    {
+        this.sin = sin;
+        this.square = square;
+        this.sawtooth = sawtooth;
+    }
 }
 
 [System.Serializable]
@@ -86,6 +137,7 @@ public class Note
     private double startPlayTime;
     private double releaseTime;
     private bool beingHeld;
+    private float volBeforeRelease = 0;
         
     public Note(InstrumentData instrument, float frequency)
     {
@@ -102,9 +154,22 @@ public class Note
         beingHeld = false;
     }
 
+    public void setVolumeBeforeRelease(float currentVol)
+    {
+        volBeforeRelease = currentVol;
+    }
+    public float getVolumeBeforeRelease()
+    {
+        return volBeforeRelease;
+    }
+
     public Waveform getWaveform()
     {
         return instrument.waveform;
+    }
+    public WaveformMix getWaveformMix()
+    {
+        return instrument.waveformMix;
     }
     public ADSR getADSR()
     {
@@ -113,6 +178,10 @@ public class Note
     public float[] getHarmonics()
     {
         return instrument.harmonicStrengths;
+    }
+    public float getVolumeMultiplier()
+    {
+        return instrument.volumeMultiplier;
     }
 
     public float getFrequency()
@@ -149,14 +218,16 @@ public class Oscillator2 : MonoBehaviour
 
 
     private float samplingFrequency = 48000.0f;
-    public float gain = 0.1f;
+    public float gain = 0.05f;
 
     public Instrument KeyboardInstrument;
 
     private float currentFrequency;
     private Waveform currentWaveform;
+    private float currentWeight;
     public ADSR adsr;
     private float[] currentHarmonics;
+    private float currentVolumeMultiplier;
     
     public bool KeyboardOn = false;
     public float[] scale = new float[8];
@@ -239,6 +310,8 @@ public class Oscillator2 : MonoBehaviour
         while (j < ActiveNotes.Count)
         {
             Note note = ActiveNotes.ElementAt(j);
+
+            //ADSR
             adsr = note.getADSR();
 
             float timePlaying = (float)(AudioSettings.dspTime - note.getStartTime());
@@ -265,17 +338,36 @@ public class Oscillator2 : MonoBehaviour
                 }
 
                 volumeModifier = Mathf.InverseLerp(0.0f, adsr.release, timePlaying);
-                volumeModifier = Mathf.Lerp(adsr.sustain, 0.0f, volumeModifier);
+                //volumeModifier = Mathf.Lerp(adsr.sustain, 0.0f, volumeModifier);
+                volumeModifier = Mathf.Lerp(note.getVolumeBeforeRelease(), 0.0f, volumeModifier);
+            }
+            else
+            {
+                note.setVolumeBeforeRelease(volumeModifier);
             }
 
+            //Fill Data
             currentFrequency = note.getFrequency();
             currentWaveform = note.getWaveform();
             currentHarmonics = note.getHarmonics();
+            currentVolumeMultiplier = note.getVolumeMultiplier();
             
             int currentDataStep = 0;
             for (int i = 0; i < data.Length; i++)
             {
-                data[i] += ReturnHarmonicSeries(currentDataStep, note.getStartTime()) * gain * volumeModifier;
+                //Sin
+                currentWaveform = Waveform.Sin;
+                currentWeight = note.getWaveformMix().sin;
+                if (currentWeight > 0f) data[i] += ReturnHarmonicSeries(currentDataStep, note.getStartTime()) * gain * volumeModifier;
+                //Square
+                currentWaveform = Waveform.Square;
+                currentWeight = note.getWaveformMix().square;
+                if (currentWeight > 0f) data[i] += ReturnHarmonicSeries(currentDataStep, note.getStartTime()) * gain * volumeModifier;
+                //Sawtooth
+                currentWaveform = Waveform.Sawtooth;
+                currentWeight = note.getWaveformMix().sawtooth;
+                if (currentWeight > 0f) data[i] += ReturnHarmonicSeries(currentDataStep, note.getStartTime()) * gain * volumeModifier;
+
                 currentDataStep++;
                 if (channels == 2)
                 {
@@ -299,31 +391,31 @@ public class Oscillator2 : MonoBehaviour
             float timeAtBeginning = (float)((AudioSettings.dspTime - audioTime) % (1.0 / (double)harmonicFrequency));
             float exactTime = timeAtBeginning + dataIndex / samplingFrequency;
 
-            result += WaveFunction(exactTime * harmonicFrequency * 2f * Mathf.PI, currentWaveform) * currentHarmonics[i-1];
+            result += WaveFunction(exactTime * harmonicFrequency * 2f * Mathf.PI, currentWaveform, currentWeight) * currentHarmonics[i-1] * currentVolumeMultiplier;
         }
 
         return result;
     }
 
-    public float WaveFunction(float input, Waveform wave)
+    public float WaveFunction(float input, Waveform wave, float weight)
     {
         switch (wave)
         {
             case Waveform.Sin:
             {
-                return SinWave(input);
+                return SinWave(input) * weight;
             }
             case Waveform.Square:
             {
-                return SquareWave(input);
+                return SquareWave(input) * weight;
             }
             case Waveform.Triangle:
             {
-                return TriangleWave(input);
+                return TriangleWave(input) * weight;
             }
             case Waveform.Sawtooth:
             {
-                return SawtoothWave(input/2);
+                return SawtoothWave(input/2) * weight;
             }
             default:
             {
@@ -347,7 +439,8 @@ public class Oscillator2 : MonoBehaviour
     }
     public float TriangleWave(float input)
     {
-        return Mathf.PingPong(input, 1.0f);
+        //return Mathf.PingPong(input, 1.0f);
+        return 1f - 4f*(float)Math.Abs(Math.Round(input/5-0.25f)-(input/5-0.25f));
     }
     public float SawtoothWave(float input)
     {

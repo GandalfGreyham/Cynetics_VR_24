@@ -15,6 +15,11 @@ public class MusicStick : MonoBehaviour
     public Note[,] NoteStorageD = new Note[6,8];
     private float[,] frequencies;
 
+    public float instrumentA
+    public float instrumentB
+    public float instrumentC
+    public float instrumentD
+
     public float[,] NoteMatrix(float baseFrequency, int octaves)
     {
         float[,] matrix = new float[octaves,8];
@@ -55,7 +60,7 @@ public class MusicStick : MonoBehaviour
             if (tileName[0].Equals('A'))
             {
 
-                instrument = Instrument.Basic;
+                instrument = instrumentA;
                 storage = NoteStorageA;
                 frequency = storage[octaveIndex, intervalIndex].getFrequency();
                 //color change
@@ -64,7 +69,7 @@ public class MusicStick : MonoBehaviour
             }
             else if (tileName[0].Equals('B'))
             {
-                instrument = Instrument.SquareWave;
+                instrument = instrumentB;
                 storage = NoteStorageB;
                 frequency = storage[octaveIndex, intervalIndex].getFrequency();
                 //color change
@@ -73,7 +78,7 @@ public class MusicStick : MonoBehaviour
             }
             else if (tileName[0].Equals('C'))
             {
-                instrument = Instrument.Basic;
+                instrument = instrumentC;
                 storage = NoteStorageC;
                 frequency = storage[octaveIndex, intervalIndex].getFrequency();
                 //color change
@@ -82,7 +87,7 @@ public class MusicStick : MonoBehaviour
             } 
             else
             {
-                instrument = Instrument.Strings_WIP;
+                instrument = instrumentD;
                 storage = NoteStorageD;
                 frequency = storage[octaveIndex, intervalIndex].getFrequency();
                 //color change

@@ -23,6 +23,15 @@ public class MusicStick : MonoBehaviour
     float colorOctave;
     float colorInterval;
 
+    //float groundColorSpeedChange;
+    //float groundColor;//target ground color
+    //float lastGroundColor;//holds the last target ground color
+    //float currentGroundColor;//will change until it matches the target ground color
+    //float newColor;
+    //private bool colorTransitioning = false;
+
+    public GameObject lumpyTerrain;
+
     public float[,] NoteMatrix(float baseFrequency, int octaves)
     {
         float[,] matrix = new float[octaves,8];
@@ -75,8 +84,13 @@ public class MusicStick : MonoBehaviour
                 renderer.material.SetFloat("_Instrument_A", 1.0f);
                 renderer.material.SetFloat("_OctaveRow", colorOctave);
                 renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", colorInterval);
-                Debug.Log(colorOctave);
-                Debug.Log(colorInterval);
+
+                //ground color change
+                //groundColor = 0; 
+
+
+                //Debug.Log(colorOctave);
+                //Debug.Log(colorInterval);
             }
             else if (tileName[0].Equals('B'))
             {
@@ -88,8 +102,9 @@ public class MusicStick : MonoBehaviour
                 renderer.material.SetFloat("_Instrument_B", 1.0f);
                 renderer.material.SetFloat("_OctaveRow", colorOctave);
                 renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", colorInterval);
-                Debug.Log(colorOctave);
-                Debug.Log(colorInterval);
+                //groundColor = 5;
+                //Debug.Log(colorOctave);
+                //Debug.Log(colorInterval);
             }
             else if (tileName[0].Equals('C'))
             {
@@ -101,8 +116,9 @@ public class MusicStick : MonoBehaviour
                 renderer.material.SetFloat("_Instrument_C", 1.0f);
                 renderer.material.SetFloat("_OctaveRow", colorOctave);
                 renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", colorInterval);
-                Debug.Log(colorOctave);
-                Debug.Log(colorInterval);
+                //groundColor = 10;
+                //Debug.Log(colorOctave);
+                //Debug.Log(colorInterval);
             } 
             else
             {
@@ -114,9 +130,10 @@ public class MusicStick : MonoBehaviour
                 renderer.material.SetFloat("_Instrument_D", 1.0f);
                 renderer.material.SetFloat("_OctaveRow", colorOctave);
                 renderer.material.SetFloat("_Instrument_Color_FrequencyBlend", colorInterval);
-                
-                Debug.Log(colorOctave);
-                Debug.Log(colorInterval);
+                //groundColor = 20f;
+
+                //Debug.Log(colorOctave);
+                //Debug.Log(colorInterval);
             }
 
             
@@ -174,7 +191,7 @@ public class MusicStick : MonoBehaviour
 
             oscillator.ReleaseNote(storage[octaveIndex,intervalIndex]);
         }
-     
+    
     }
 
     
@@ -182,11 +199,29 @@ public class MusicStick : MonoBehaviour
     void Start()
     {
         frequencies = NoteMatrix(32.7f,6);
+
+        //currentGroundColor = groundColor;
+        //lastGroundColor = groundColor;
     }
 
     // Update is called once per frame
     void Update()
     {
+       
+        /*if (newColor != groundColor)
+        {
+            lastGroundColor = groundColor;
+            groundColor = newColor;
+            groundColorSpeedChange = Mathf.Abs(groundColor - lastGroundColor);
+            currentGroundColor = Mathf.Lerp(lastGroundColor, groundColor, Time.deltaTime/groundColorSpeedChange);
+            Renderer groundRenderer = lumpyTerrain.GetComponent<Renderer>();
+            groundRenderer.material.SetFloat("_GroundColor", currentGroundColor);
+
+            Debug.Log(currentGroundColor);
+
+        }*/
+
+
         
     }
 }

@@ -9,7 +9,6 @@ Library: /Users/matthewpark/Desktop/Cynetics_VR_24/Temp/BurstOutput/tempburstlib
 --target-framework=NetFramework
 --assembly-defines=Assembly-CSharp;
 --assembly-defines=Boxophobic.Utils.Scripts;
---assembly-defines=Meta.XR.Audio;
 --assembly-defines=Meta.XR.BuildingBlocks;
 --assembly-defines=meta.xr.mrutilitykit;
 --assembly-defines=Mono.Security;
@@ -63,7 +62,6 @@ Library: /Users/matthewpark/Desktop/Cynetics_VR_24/Temp/BurstOutput/tempburstlib
 --float-mode=Fast
 --assembly-defines=Assembly-CSharp;
 --assembly-defines=Boxophobic.Utils.Scripts;
---assembly-defines=Meta.XR.Audio;
 --assembly-defines=Meta.XR.BuildingBlocks;
 --assembly-defines=meta.xr.mrutilitykit;
 --assembly-defines=Mono.Security;

@@ -7,10 +7,14 @@ public class RippleInstrument : MonoBehaviour
     public GameObject waterPlaneObject; // Reference to the plane GameObject
     public Material waterPlaneMaterial; // Reference to the material used
     private Vector3 waterPlaneSize;
+    /*
     private float currentWaveDensity_01;
     private float currentWaveDensity_02;
     private float currentWaveDensity_03;
     private float currentWaveDensity_04;
+    */
+
+    private float[] currentWaveDensities;
 
     private const float waveDensityDecreaseRate = 0.12f;
     private const float waveDensityThreshold = 0.01f;
@@ -25,20 +29,30 @@ public class RippleInstrument : MonoBehaviour
         }
 
         // Initialize wave densities
+        /*
         currentWaveDensity_01 = waterPlaneMaterial.GetFloat("_WaveDensity");
         currentWaveDensity_02 = waterPlaneMaterial.GetFloat("_WaveDensity_02");
         currentWaveDensity_03 = waterPlaneMaterial.GetFloat("_WaveDensity_03");
         currentWaveDensity_04 = waterPlaneMaterial.GetFloat("_WaveDensity_04");
+        */
+
+        currentWaveDensities = new float[4];
+
+        currentWaveDensities[0] = waterPlaneMaterial.GetFloat("_WaveDensity");
+        currentWaveDensities[1] = waterPlaneMaterial.GetFloat("_WaveDensity_02");
+        currentWaveDensities[2] = waterPlaneMaterial.GetFloat("_WaveDensity_03");
+        currentWaveDensities[3] = waterPlaneMaterial.GetFloat("_WaveDensity_04");
+
     }
 
     void Update()
     {
-        UpdateWaveDensity(ref currentWaveDensity_01, "_WaveDensity");
-        UpdateWaveDensity(ref currentWaveDensity_02, "_WaveDensity_02");
-        UpdateWaveDensity(ref currentWaveDensity_03, "_WaveDensity_03");
-        UpdateWaveDensity(ref currentWaveDensity_04, "_WaveDensity_04");
+        UpdateWaveDensity(ref currentWaveDensities[0], "_WaveDensity");
+        UpdateWaveDensity(ref currentWaveDensities[1], "_WaveDensity_02");
+        UpdateWaveDensity(ref currentWaveDensities[2], "_WaveDensity_03");
+        UpdateWaveDensity(ref currentWaveDensities[3], "_WaveDensity_04");
 
-        Debug.Log("WD1 = " + currentWaveDensity_01 + " __WD2 = " + currentWaveDensity_02 + " __WD3 = " + currentWaveDensity_03 + " __WD4 = " + currentWaveDensity_04);
+        Debug.Log("WD1 = " + currentWaveDensities[0] + " __WD2 = " + currentWaveDensities[1] + " __WD3 = " + currentWaveDensities[2] + " __WD4 = " + currentWaveDensities[3]);
     }
 
     void UpdateWaveDensity(ref float currentWaveDensity, string propertyName)
@@ -58,27 +72,67 @@ public class RippleInstrument : MonoBehaviour
     {
         if (other.gameObject.CompareTag("WaterPlane"))
         {
+            int minRipple = 0;
+            float minValue = 0f;
+            for (int i = 0; i < 4; i++)
+            {
+                if (currentWaveDensities[i] < minValue)
+                {
+                    minRipple = i;
+                    minValue = currentWaveDensities[i];
+                }
+            }
+
+            string pName = "";
+            switch (minRipple)
+            {
+                case 0:
+                {
+                    pName = "_WaveDensity";
+                    break;
+                }
+                case 1:
+                {
+                    pName = "_WaveDensity_02";
+                    break;
+                }
+                case 2:
+                {
+                    pName = "_WaveDensity_03";
+                    break;
+                }
+                case 3:
+                {
+                    pName = "_WaveDensity_04";
+                    break;
+                }
+            }
+            Debug.Log(pName);
+            CreateRipple(ref currentWaveDensities[minRipple], pName, other);
+
+            /*
             // Create a ripple effect based on available wave density slots
-            if (currentWaveDensity_01 < 1f)
+            if (currentWaveDensity_01 <= 0f)
             {
                 CreateRipple(ref currentWaveDensity_01, "_WaveDensity", other);
             }
-            else if (currentWaveDensity_02 < 1f)
+            else if (currentWaveDensity_02 <= 0f)
             {
                 CreateRipple(ref currentWaveDensity_02, "_WaveDensity_02", other);
             }
-            else if (currentWaveDensity_03 < 1f)
+            else if (currentWaveDensity_03 <= 0f)
             {
                 CreateRipple(ref currentWaveDensity_03, "_WaveDensity_03", other);
             }
-            else if (currentWaveDensity_04 < 1f)
+            else if (currentWaveDensity_04 <= 0f)
             {
                 CreateRipple(ref currentWaveDensity_04, "_WaveDensity_04", other);
             }
             else
             {
-                Debug.Log("Too many ripples");
+               // Debug.Log("Too many ripples");
             }
+            */
         }
     }
 

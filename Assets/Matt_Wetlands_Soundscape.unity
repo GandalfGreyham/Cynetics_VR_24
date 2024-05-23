@@ -43762,6 +43762,32 @@ Transform:
   - {fileID: 198058397}
   m_Father: {fileID: 2002859631}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1530303088 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2632119591390039721, guid: d1eb7b819a0544508aa617229001dc1a, type: 3}
+  m_PrefabInstance: {fileID: 2542847106392821012}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1530303094
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1530303088}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 0.99999994, y: 11.05, z: 0.99999994}
+  m_Center: {x: 0, y: -5.44, z: 0}
 --- !u!1 &1532789611
 GameObject:
   m_ObjectHideFlags: 0
@@ -53468,6 +53494,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: pPlane2
       objectReference: {fileID: 0}
+    - target: {fileID: 3797523259488080615, guid: d1eb7b819a0544508aa617229001dc1a, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5769356265617501647, guid: d1eb7b819a0544508aa617229001dc1a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -53511,7 +53541,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2632119591390039721, guid: d1eb7b819a0544508aa617229001dc1a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1530303094}
   m_SourcePrefab: {fileID: 100100000, guid: d1eb7b819a0544508aa617229001dc1a, type: 3}
 --- !u!1001 &7116944104213925715
 PrefabInstance:

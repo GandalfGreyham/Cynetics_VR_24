@@ -302,8 +302,8 @@ public class Oscillator2 : MonoBehaviour
     //Plays a note of a given frequency
     public Note PlayNote(Instrument instrument, float frequency)
     {
-        //Note note = new Note(instrumentReferences[(int)instrument] , frequency);
-        Note note = new Note(new InstrumentData(instrument) , frequency);
+        Note note = new Note(instrumentReferences[(int)instrument] , frequency);
+        //Note note = new Note(new InstrumentData(instrument) , frequency);
         ActiveNotes.AddLast(note);
         return note;
     }

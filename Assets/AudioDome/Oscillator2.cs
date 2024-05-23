@@ -222,6 +222,8 @@ public class Oscillator2 : MonoBehaviour
 
     public Instrument KeyboardInstrument;
 
+    public InstrumentData[] instrumentReferences = new InstrumentData[6];
+
     private float currentFrequency;
     private Waveform currentWaveform;
     private float currentWeight;
@@ -235,6 +237,13 @@ public class Oscillator2 : MonoBehaviour
 
     void Start()
     {
+        //Creating Instruments
+        for (int i = 0; i < instrumentReferences.Length; i++)
+        {
+            instrumentReferences[i] = new InstrumentData((Instrument)i);
+        }
+
+        //Keyboard Scale
         float baseFrequency = 440;
         scale[0] = baseFrequency;
         scale[1] = baseFrequency * 1.125f;
@@ -293,6 +302,7 @@ public class Oscillator2 : MonoBehaviour
     //Plays a note of a given frequency
     public Note PlayNote(Instrument instrument, float frequency)
     {
+        //Note note = new Note(instrumentReferences[(int)instrument] , frequency);
         Note note = new Note(new InstrumentData(instrument) , frequency);
         ActiveNotes.AddLast(note);
         return note;
@@ -358,15 +368,15 @@ public class Oscillator2 : MonoBehaviour
                 //Sin
                 currentWaveform = Waveform.Sin;
                 currentWeight = note.getWaveformMix().sin;
-                if (currentWeight > 0f) data[i] += ReturnHarmonicSeries(currentDataStep, note.getStartTime()) * gain * volumeModifier;
+                if (currentWeight > 0f) data[i] += ReturnHarmonicSeries(currentDataStep, note.getStartTime()) * gain * volumeModifier * currentWeight;
                 //Square
                 currentWaveform = Waveform.Square;
                 currentWeight = note.getWaveformMix().square;
-                if (currentWeight > 0f) data[i] += ReturnHarmonicSeries(currentDataStep, note.getStartTime()) * gain * volumeModifier;
+                if (currentWeight > 0f) data[i] += ReturnHarmonicSeries(currentDataStep, note.getStartTime()) * gain * volumeModifier * currentWeight;
                 //Sawtooth
                 currentWaveform = Waveform.Sawtooth;
                 currentWeight = note.getWaveformMix().sawtooth;
-                if (currentWeight > 0f) data[i] += ReturnHarmonicSeries(currentDataStep, note.getStartTime()) * gain * volumeModifier;
+                if (currentWeight > 0f) data[i] += ReturnHarmonicSeries(currentDataStep, note.getStartTime()) * gain * volumeModifier * currentWeight;
 
                 currentDataStep++;
                 if (channels == 2)

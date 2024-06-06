@@ -32,6 +32,8 @@ public class MusicStick : MonoBehaviour
 
     public GameObject lumpyTerrain;
 
+    public float wammyRotation;
+
     public float[,] NoteMatrix(float baseFrequency, int octaves)
     {
         float[,] matrix = new float[octaves,8];
@@ -51,7 +53,7 @@ public class MusicStick : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-         
+        
         if (col.gameObject.tag == "DomeTile")
         {
             float frequency;

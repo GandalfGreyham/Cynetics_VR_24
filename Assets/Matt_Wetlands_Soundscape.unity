@@ -42384,6 +42384,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: oscillator
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
       propertyPath: instrumentA
       value: 2
       objectReference: {fileID: 0}
@@ -42407,7 +42411,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: MusicStick
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5164732989287809045, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

@@ -2024,6 +2024,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: synthesizer
+      value: 
+      objectReference: {fileID: 198058399}
+    - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
       propertyPath: lumpyTerrain
       value: 
       objectReference: {fileID: 1100395415}
@@ -2031,16 +2035,39 @@ PrefabInstance:
       propertyPath: m_Name
       value: MusicStick (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5164732989287809045, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5164732989287809048, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 198058399}
   m_SourcePrefab: {fileID: 100100000, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
 --- !u!4 &198058397 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5164732989287809041, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
   m_PrefabInstance: {fileID: 198058396}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &198058398 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5164732989287809048, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+  m_PrefabInstance: {fileID: 198058396}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &198058399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198058398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 959dcc466f531c5499159ea5a5667feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gain: 0.05
+  wammyRotation: 0
 --- !u!1 &204442152
 GameObject:
   m_ObjectHideFlags: 0
@@ -42384,6 +42411,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: oscillator
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
       propertyPath: instrumentA
       value: 2
       objectReference: {fileID: 0}
@@ -42400,6 +42431,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      propertyPath: synthesizer
+      value: 
+      objectReference: {fileID: 1360039349}
+    - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
       propertyPath: lumpyTerrain
       value: 
       objectReference: {fileID: 1100395415}
@@ -42407,16 +42442,40 @@ PrefabInstance:
       propertyPath: m_Name
       value: MusicStick
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
+    - {fileID: 5164732989287809045, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5164732989287809048, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1360039349}
   m_SourcePrefab: {fileID: 100100000, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
 --- !u!4 &1360039347 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5164732989287809041, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
   m_PrefabInstance: {fileID: 1360039346}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1360039348 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5164732989287809048, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
+  m_PrefabInstance: {fileID: 1360039346}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1360039349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360039348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 959dcc466f531c5499159ea5a5667feb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gain: 0.05
+  wammyRotation: 0
 --- !u!1 &1368858464 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8349222004726856300, guid: f47fd453fd767064e95c3518d3ba1d21, type: 3}

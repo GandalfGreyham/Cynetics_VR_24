@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class Note
 {
     public InstrumentData instrument;
     public float frequency;
+    public float frequencyModifier = 1f;
 
     public double startTime;
     public double releaseTime;
@@ -13,6 +15,9 @@ public class Note
 
     public float volPrevFrame = 0f;
     public float volBeforeRelease = 0f;
+
+    public float oscillationFreq = 1f;
+    public float oscillationMag = 0f;
 
     public Note(InstrumentData instrument, float frequency)
     {
@@ -27,6 +32,12 @@ public class Note
     {
         releaseTime = AudioSettings.dspTime;
         beingHeld = false;
+    }
+
+    public void ModifyOscillation(float freq, float mag)
+    {
+        oscillationFreq = freq;
+        oscillationMag = mag;
     }
 
     public float getInstrumentVolume()

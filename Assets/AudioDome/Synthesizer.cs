@@ -51,10 +51,12 @@ public class Synthesizer : MonoBehaviour
             float volumeModifier = CalculateADSR(note);
             if (volumeModifier < 0f) continue;
 
+            volumeModifier *= CalculateOscillation(note);
+
             float volPrevFrame = note.volPrevFrame;
             float volThisFrame = volumeModifier;
 
-            float baseFrequency = note.frequency;
+            float baseFrequency = note.frequency * note.frequencyModifier;
             float baseVolume = note.getInstrumentVolume();
             WaveformMix waveform = note.getWaveform();
             float[,] overtones = note.getOvertones();
@@ -113,6 +115,19 @@ public class Synthesizer : MonoBehaviour
             note.setVolBeforeRelease(volumeModifier);
         }
         
+        return volumeModifier;
+    }
+
+    private float CalculateOscillation(Note note)
+    {
+        float volumeModifier = 1f;
+
+        float timePlaying = (float)(AudioSettings.dspTime - note.startTime);
+        float oscillation = SinWave(timePlaying * note.oscillationFreq)*0.5f + 0.5f;
+
+        oscillation *= note.oscillationMag;
+        volumeModifier -= oscillation;
+
         return volumeModifier;
     }
 

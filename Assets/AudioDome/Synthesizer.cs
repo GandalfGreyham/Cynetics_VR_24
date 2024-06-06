@@ -11,7 +11,7 @@ public class Synthesizer : MonoBehaviour
 
     private float samplingFrequency = 48000.0f;
     public float gain = 0.05f;
-    public float wammyRotation;
+    //public float wammyRotation;
 
     public InstrumentData[] instruments = new InstrumentData[Enum.GetNames(typeof(Instrument)).Length];
 

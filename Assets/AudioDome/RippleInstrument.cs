@@ -52,7 +52,7 @@ public class RippleInstrument : MonoBehaviour
         UpdateWaveDensity(ref currentWaveDensities[2], "_WaveDensity_03");
         UpdateWaveDensity(ref currentWaveDensities[3], "_WaveDensity_04");
 
-        Debug.Log("WD1 = " + currentWaveDensities[0] + " __WD2 = " + currentWaveDensities[1] + " __WD3 = " + currentWaveDensities[2] + " __WD4 = " + currentWaveDensities[3]);
+        //Debug.Log("WD1 = " + currentWaveDensities[0] + " __WD2 = " + currentWaveDensities[1] + " __WD3 = " + currentWaveDensities[2] + " __WD4 = " + currentWaveDensities[3]);
     }
 
     void UpdateWaveDensity(ref float currentWaveDensity, string propertyName)

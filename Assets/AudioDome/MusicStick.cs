@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MusicStick : MonoBehaviour
 {
-   
+    //Quaternion worldRotation = transform.rotation;
 
     public Synthesizer synthesizer;
 
@@ -32,7 +32,13 @@ public class MusicStick : MonoBehaviour
 
     public GameObject lumpyTerrain;
 
+
     public float wammyRotation;
+    public float wammyTiming;
+    public int frameCounter = 0;
+    public float newNote;
+    public bool wammyON;
+    
 
     public float[,] NoteMatrix(float baseFrequency, int octaves)
     {
@@ -57,7 +63,8 @@ public class MusicStick : MonoBehaviour
         if (col.gameObject.tag == "DomeTile")
         {
             float frequency;
-            
+
+            wammyRotation = transform.rotation.x;
 
             //Matt added - change color on interaction
             Renderer renderer = col.GetComponent<Renderer>();
@@ -71,7 +78,6 @@ public class MusicStick : MonoBehaviour
             int intervalIndex = num % 8;
             colorOctave = octaveIndex / 5f;
             colorInterval = intervalIndex / 7f;
-
 
             Instrument instrument;
             Note[,] storage;
@@ -145,6 +151,83 @@ public class MusicStick : MonoBehaviour
         }
     }
 
+
+    void OnTriggerStay(Collider col)
+    {
+       
+        if (col.gameObject.tag == "DomeTile")
+        {
+            frameCounter++;
+
+            float wammyComparison = Mathf.Abs(wammyRotation - transform.rotation.x);
+
+            //Debug.Log(wammyRotation + " , " + transform.rotation.x + " === WC " + wammyComparison);
+
+            float wammyEffect = wammyComparison / 360f;
+            float wammySpeed = Mathf.Lerp(120, 20, wammyEffect); //45, 15
+            float wammyIntensity = 2f;
+
+            //Debug.Log("WC" + wammyComparison + "WE" + wammyEffect + "WS" + wammySpeed + "WI" + wammyIntensity);
+           
+            if (frameCounter >= wammySpeed)
+            {
+                frameCounter = 0; // Reset the counter
+                foreach (Note note in synthesizer.ActiveNotes)
+                {
+
+                    note.frequencyModifier = 1 + (wammyIntensity * wammyEffect);
+
+                    newNote = note.frequencyModifier;
+                    Debug.Log("newNote set to" + newNote + ", oldNote is " + note.frequencyModifier);
+
+                    wammyTiming = wammySpeed/60f;
+
+                    Debug.Log("updated Wammy");
+
+                    
+                }
+
+                StopCoroutine(UnWammyBar(newNote, 1f, wammyTiming));
+                wammyON = false;
+
+            }
+            else if (frameCounter < wammySpeed && wammyON == false)
+            {
+
+                
+                StartCoroutine(UnWammyBar(newNote, 1f, wammyTiming));
+
+            }
+
+        }
+
+    }
+
+    public IEnumerator UnWammyBar(float from, float to, float duration)
+    {
+        wammyON = true;
+        foreach (Note note in synthesizer.ActiveNotes)
+        {  
+            float elapsedTime = 0f;
+            newNote = from;
+            Debug.Log(newNote + "in UnWammy");
+            //duration = wammyTiming;
+
+            while (elapsedTime < duration)
+            {
+                elapsedTime += Time.deltaTime;
+                note.frequencyModifier = Mathf.Lerp(from, to, elapsedTime / wammyTiming);
+                //Debug.Log("UnWammyING");
+                yield return null; // Wait for the next frame
+            }
+
+            // Ensure the final value is set to the target value
+            //newNote = to;
+            //Debug.Log("Final Value: " + newNote);
+        }
+    }
+
+
     void OnTriggerExit(Collider col)
     {
         if (col.gameObject.tag == "DomeTile")
@@ -190,6 +273,8 @@ public class MusicStick : MonoBehaviour
 
             int octaveIndex = 5 - (num / 8);
             int intervalIndex = num % 8;
+
+            wammyRotation = 0f;
 
             synthesizer.ReleaseNote(storage[octaveIndex,intervalIndex]);
         }

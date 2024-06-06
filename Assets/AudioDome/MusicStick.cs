@@ -7,7 +7,7 @@ public class MusicStick : MonoBehaviour
 {
    
 
-    public Oscillator2 oscillator;
+    public Synthesizer synthesizer;
 
     public Note[,] NoteStorageA = new Note[6,8];
     public Note[,] NoteStorageB = new Note[6,8];
@@ -138,7 +138,7 @@ public class MusicStick : MonoBehaviour
 
             
 
-            storage[octaveIndex,intervalIndex] = oscillator.PlayNote(instrument, frequencies[octaveIndex,intervalIndex]);
+            storage[octaveIndex,intervalIndex] = synthesizer.PlayNote(instrument, frequencies[octaveIndex,intervalIndex]);
             
         }
     }
@@ -189,7 +189,7 @@ public class MusicStick : MonoBehaviour
             int octaveIndex = 5 - (num / 8);
             int intervalIndex = num % 8;
 
-            oscillator.ReleaseNote(storage[octaveIndex,intervalIndex]);
+            synthesizer.ReleaseNote(storage[octaveIndex,intervalIndex]);
         }
     
     }

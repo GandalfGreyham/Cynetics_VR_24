@@ -11,7 +11,6 @@ public class Synthesizer : MonoBehaviour
 
     private float samplingFrequency = 48000.0f;
     public float gain = 0.05f;
-    public float wammyRotation;
 
     public InstrumentData[] instruments = new InstrumentData[Enum.GetNames(typeof(Instrument)).Length];
 
@@ -36,10 +35,25 @@ public class Synthesizer : MonoBehaviour
         ActiveNotes.AddLast(note);
         return note;
     }
+    public Note PlayNote(Instrument instrument, float frequency, float holdTime, bool fade)
+    {
+        Note note = new Note(instruments[(int)instrument] , frequency, holdTime, fade);
+        ActiveNotes.AddLast(note);
+        return note;
+    }
+    public Note PlayNote(InstrumentData instrument, float frequency, float holdTime, bool fade)
+    {
+        Note note = new Note(instrument, frequency, holdTime, fade);
+        ActiveNotes.AddLast(note);
+        return note;
+    }
 
     public void ReleaseNote(Note note)
     {
-        note.Release();
+        if (note.holdTime < 0f)
+        {
+            note.Release();
+        }
     }
 
     void OnAudioFilterRead(float[] data, int channels)
@@ -97,6 +111,15 @@ public class Synthesizer : MonoBehaviour
         {
             volumeModifier = Mathf.InverseLerp(adsr.attack, adsr.attack+adsr.decay, timePlaying);
             volumeModifier = Mathf.Lerp(1.0f, adsr.sustain, volumeModifier);
+        }
+
+        if (note.holdTime > 0f && note.beingHeld)
+        {
+            if (note.fade) volumeModifier *= 1 - timePlaying/note.holdTime;
+            if (timePlaying > note.holdTime)
+            {
+                note.Release();
+            }
         }
 
         if (!note.beingHeld)

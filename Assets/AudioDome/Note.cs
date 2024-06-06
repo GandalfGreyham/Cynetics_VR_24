@@ -19,6 +19,9 @@ public class Note
     public float oscillationFreq = 1f;
     public float oscillationMag = 0f;
 
+    public float holdTime;
+    public bool fade;
+
     public Note(InstrumentData instrument, float frequency)
     {
         this.instrument = instrument;
@@ -26,6 +29,20 @@ public class Note
         startTime = AudioSettings.dspTime;
         releaseTime = -1;
         beingHeld = true;
+
+        holdTime = -1;
+        fade = false;
+    }
+    public Note(InstrumentData instrument, float frequency, float holdTime, bool fade)
+    {
+        this.instrument = instrument;
+        this.frequency = frequency;
+        startTime = AudioSettings.dspTime;
+        releaseTime = -1;
+        beingHeld = true;
+
+        this.holdTime = holdTime;
+        this.fade = fade;
     }
 
     public void Release()

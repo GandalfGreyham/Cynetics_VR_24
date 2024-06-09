@@ -2066,10 +2066,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 959dcc466f531c5499159ea5a5667feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActiveNotes: []
-  ObjNotePrefabs: []
-  noteComponents: []
-  note: {fileID: 0}
   gain: 0.05
 --- !u!1 &204442152
 GameObject:
@@ -6296,37 +6292,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1520250799}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &748511650
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 748511651}
-  m_Layer: 0
-  m_Name: SpawPoint_A
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &748511651
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 748511650}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.73, y: 1.02, z: 0.45}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &750084981
 GameObject:
@@ -42483,7 +42448,7 @@ PrefabInstance:
     - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
       propertyPath: spawnPoint_A
       value: 
-      objectReference: {fileID: 748511650}
+      objectReference: {fileID: 0}
     - target: {fileID: 5164732989287809047, guid: 271ecf7e8c33b724da95f14b0b59839f, type: 3}
       propertyPath: objNotePrefab
       value: 
@@ -53710,4 +53675,3 @@ SceneRoots:
   - {fileID: 2542847106392821012}
   - {fileID: 428932564}
   - {fileID: 1629156998}
-  - {fileID: 748511651}

@@ -7,73 +7,44 @@ using UnityEngine;
 
 public class Synthesizer : MonoBehaviour
 {
-    public List<Note> ActiveNotes = new List<Note>();
-    public List<GameObject> ObjNotePrefabs = new List<GameObject>();
-    public List<Note> noteComponents = new List<Note>();
-    public Note note;
+    public LinkedList<Note> ActiveNotes = new LinkedList<Note>();
 
     private float samplingFrequency = 48000.0f;
     public float gain = 0.05f;
-    //public int activeNotes = 0;
 
     public InstrumentData[] instruments = new InstrumentData[Enum.GetNames(typeof(Instrument)).Length];
 
     void Start()
     {
-
-        note = GetComponent<Note>();
         //Creates references to all predefined intruments in the Instrument enum
         for (int i = 0; i < instruments.Length; i++)
         {
             instruments[i] = new InstrumentData((Instrument)i);
         }
+    }
 
-
-
-        ObjNotePrefabs.Add(gameObject);
-
-        foreach (GameObject gameObject in ObjNotePrefabs)
-        {
-           Note noteComponent = gameObject.GetComponent<Note>();
-           noteComponents.Add(noteComponent);
-
-            foreach (Note note in noteComponents)
-            {
-                ActiveNotes.Add(note);
-            }
-        }
-
-
-
-}
     public Note PlayNote(Instrument instrument, float frequency)
     {
-        //note Note(instruments[(int)instrument] , frequency);
-        //List<Note>ActiveNotes(instruments[(int)instrument] , frequency);
-
-        //ActiveNotes.AddLast(note);
-        //activeNotes = 1;
+        Note note = new Note(instruments[(int)instrument] , frequency);
+        ActiveNotes.AddLast(note);
         return note;
     }
     public Note PlayNote(InstrumentData instrument, float frequency)
     {
         Note note = new Note(instrument, frequency);
-        //ActiveNotes.AddLast(note);
-        //activeNotes = 1;
+        ActiveNotes.AddLast(note);
         return note;
     }
     public Note PlayNote(Instrument instrument, float frequency, float holdTime, bool fade)
     {
         Note note = new Note(instruments[(int)instrument] , frequency, holdTime, fade);
-        //ActiveNotes.AddLast(note);
-        //activeNotes = 1;
+        ActiveNotes.AddLast(note);
         return note;
     }
     public Note PlayNote(InstrumentData instrument, float frequency, float holdTime, bool fade)
     {
         Note note = new Note(instrument, frequency, holdTime, fade);
-        //ActiveNotes.AddLast(note);
-        //activeNotes = 1;
+        ActiveNotes.AddLast(note);
         return note;
     }
 
@@ -87,7 +58,6 @@ public class Synthesizer : MonoBehaviour
 
     void OnAudioFilterRead(float[] data, int channels)
     {
-
         int j = 0;
         while (j < ActiveNotes.Count)
         {
@@ -149,7 +119,6 @@ public class Synthesizer : MonoBehaviour
             if (timePlaying > note.holdTime)
             {
                 note.Release();
-                Destroy(gameObject);
             }
         }
 
@@ -159,7 +128,6 @@ public class Synthesizer : MonoBehaviour
             if (timePlaying > adsr.release)
             {
                 ActiveNotes.Remove(note);
-                //activeNotes = 0;
                 return -1f;
             }
 

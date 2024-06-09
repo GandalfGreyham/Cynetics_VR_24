@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 
-public class Note
+public class Note : MonoBehaviour
 {
     public InstrumentData instrument;
     public float frequency;

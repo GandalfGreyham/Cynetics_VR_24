@@ -34,11 +34,18 @@ public class MusicStick : MonoBehaviour
 
 
     public float wammyRotation;
-    public float wammyTiming;
-    public int frameCounter = 0;
-    public float newNote;
+    public float wammyRotationSet; 
+    public float wammyEffect;
+    public float wammyIntensity;
+    public float wammySpeed;
+   
     public bool wammyON;
-    
+    public GameObject objNotePrefab;
+    public NotePrefab notePrefab;
+    public Note note;
+    public string notePrefabInstrumentName;
+    public GameObject spawnPoint_A;
+
 
     public float[,] NoteMatrix(float baseFrequency, int octaves)
     {
@@ -59,12 +66,16 @@ public class MusicStick : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-        
+
         if (col.gameObject.tag == "DomeTile")
         {
             float frequency;
 
-            wammyRotation = transform.rotation.x;
+            //wammyON = true;
+
+            wammyRotation = transform.rotation.x + 0.01f;
+            wammyRotationSet = wammyRotation;
+            Debug.Log(wammyRotation + "," + wammyRotationSet);
 
             //Matt added - change color on interaction
             Renderer renderer = col.GetComponent<Renderer>();
@@ -87,7 +98,7 @@ public class MusicStick : MonoBehaviour
                 instrument = instrumentA;
                 storage = NoteStorageA;
                 frequency = frequencies[octaveIndex, intervalIndex];///2092;
-             
+
                 //color change
                 renderer.material.SetFloat("_Instrument_A", 1.0f);
                 renderer.material.SetFloat("_OctaveRow", colorOctave);
@@ -105,7 +116,7 @@ public class MusicStick : MonoBehaviour
                 instrument = instrumentB;
                 storage = NoteStorageB;
                 frequency = frequencies[octaveIndex, intervalIndex];///2092;
-              
+
                 //color change
                 renderer.material.SetFloat("_Instrument_B", 1.0f);
                 renderer.material.SetFloat("_OctaveRow", colorOctave);
@@ -119,7 +130,7 @@ public class MusicStick : MonoBehaviour
                 instrument = instrumentC;
                 storage = NoteStorageC;
                 frequency = frequencies[octaveIndex, intervalIndex];///2092;
-             
+
                 //color change
                 renderer.material.SetFloat("_Instrument_C", 1.0f);
                 renderer.material.SetFloat("_OctaveRow", colorOctave);
@@ -127,13 +138,13 @@ public class MusicStick : MonoBehaviour
                 //groundColor = 10;
                 //Debug.Log(colorOctave);
                 //Debug.Log(colorInterval);
-            } 
+            }
             else
             {
                 instrument = instrumentD;
                 storage = NoteStorageD;
                 frequency = frequencies[octaveIndex, intervalIndex];///2092;
-  
+
                 //color change
                 renderer.material.SetFloat("_Instrument_D", 1.0f);
                 renderer.material.SetFloat("_OctaveRow", colorOctave);
@@ -144,100 +155,57 @@ public class MusicStick : MonoBehaviour
                 //Debug.Log(colorInterval);
             }
 
-            
 
-            storage[octaveIndex,intervalIndex] = synthesizer.PlayNote(instrument, frequencies[octaveIndex,intervalIndex]);
-            
+            /////
+            /////
+            /////
+
+            //GameObject newObjNotePrefab = Instantiate(objNotePrefab, spawnPoint_A.transform.position, Quaternion.identity);
+            //NotePrefab notePrefab = objNotePrefab.GetComponent<NotePrefab>();
+            //Synthesizer synthesizer = objNotePrefab.GetComponent<Synthesizer>();
+
+            Instantiate(objNotePrefab, spawnPoint_A.transform.position, Quaternion.identity);
+            notePrefab = objNotePrefab.GetComponent<NotePrefab>();
+            note  = objNotePrefab.GetComponent<Note>();
+            synthesizer = objNotePrefab.GetComponent<Synthesizer>();
+
+            storage[octaveIndex, intervalIndex] = notePrefab.StoreInstrument(instrument, frequency);
+            //storage[octaveIndex,intervalIndex] = synthesizer.PlayNote(instrument, frequencies[octaveIndex,intervalIndex]);
+            //storage[octaveIndex, intervalIndex] = notePrefab.StoredInstrument(instrument, frequencies[octaveIndex, intervalIndex]);
+
+            //notePrefab.instrument = instrument;
+            //notePrefab.octaveIndexNotePrefab = octaveIndex;
+            //notePrefab.intervalIndexPrefab = intervalIndex;
+            //
+            //notePrefab.storageNoteListRef = new string(storage);
+            //notePrefab.StoredInstrument =  [octaveIndex, intervalIndex];
+
+            //public Note[,] StoredInstrument;
+            //public string storageInstrumentName;
+            //public int octaveIndexNotePrefab;
+            //public int intervalIndexNotePrefab;
         }
     }
 
 
-    void OnTriggerStay(Collider col)
-    {
-       
-        if (col.gameObject.tag == "DomeTile")
-        {
-            frameCounter++;
 
-            float wammyComparison = Mathf.Abs(wammyRotation - transform.rotation.x);
-
-            //Debug.Log(wammyRotation + " , " + transform.rotation.x + " === WC " + wammyComparison);
-
-            float wammyEffect = wammyComparison / 360f;
-            float wammySpeed = Mathf.Lerp(120, 20, wammyEffect); //45, 15
-            float wammyIntensity = 2f;
-
-            //Debug.Log("WC" + wammyComparison + "WE" + wammyEffect + "WS" + wammySpeed + "WI" + wammyIntensity);
-           
-            if (frameCounter >= wammySpeed)
-            {
-                frameCounter = 0; // Reset the counter
-                foreach (Note note in synthesizer.ActiveNotes)
-                {
-
-                    note.frequencyModifier = 1 + (wammyIntensity * wammyEffect);
-
-                    newNote = note.frequencyModifier;
-                    Debug.Log("newNote set to" + newNote + ", oldNote is " + note.frequencyModifier);
-
-                    wammyTiming = wammySpeed/60f;
-
-                    Debug.Log("updated Wammy");
-
-                    
-                }
-
-                StopCoroutine(UnWammyBar(newNote, 1f, wammyTiming));
-                wammyON = false;
-
-            }
-            else if (frameCounter < wammySpeed && wammyON == false)
-            {
-
-                
-                StartCoroutine(UnWammyBar(newNote, 1f, wammyTiming));
-
-            }
-
-        }
-
-    }
-
-    public IEnumerator UnWammyBar(float from, float to, float duration)
-    {
-        wammyON = true;
-        foreach (Note note in synthesizer.ActiveNotes)
-        {  
-            float elapsedTime = 0f;
-            newNote = from;
-            Debug.Log(newNote + "in UnWammy");
-            //duration = wammyTiming;
-
-            while (elapsedTime < duration)
-            {
-                elapsedTime += Time.deltaTime;
-                note.frequencyModifier = Mathf.Lerp(from, to, elapsedTime / wammyTiming);
-                //Debug.Log("UnWammyING");
-                yield return null; // Wait for the next frame
-            }
-
-            // Ensure the final value is set to the target value
-            //newNote = to;
-            //Debug.Log("Final Value: " + newNote);
-        }
-    }
 
 
     void OnTriggerExit(Collider col)
     {
         if (col.gameObject.tag == "DomeTile")
         {
+            //wammyON = false;
+            wammyRotation = 0f;
+            wammyRotationSet = wammyRotation;
+
             //Matt added - change color on interaction
             Renderer renderer = col.GetComponent<Renderer>();
             renderer.material.SetFloat("_Highlighted", 0.0f);
 
             string tileName = col.gameObject.name;
             if (name.Substring(2).Equals("Top")) return;
+
 
             Note[,] storage;
             if (tileName[0].Equals('A'))
@@ -274,9 +242,10 @@ public class MusicStick : MonoBehaviour
             int octaveIndex = 5 - (num / 8);
             int intervalIndex = num % 8;
 
-            wammyRotation = 0f;
 
             synthesizer.ReleaseNote(storage[octaveIndex,intervalIndex]);
+            Destroy(objNotePrefab);
+            
         }
     
     }
@@ -294,7 +263,32 @@ public class MusicStick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
+
+        if (wammyRotation != 0f)
+        {
+
+            wammyRotation = transform.rotation.x + 0.01f;
+            wammyEffect = Mathf.Abs(wammyRotationSet - transform.rotation.x) / 360f;
+            wammyIntensity = 2f;
+            wammySpeed = Mathf.Lerp(0f, 100f, wammyEffect/wammyEffect*100f);
+
+            notePrefab.effectFromMusicStick_01 = 1f + (wammyEffect * wammyIntensity);
+            notePrefab.effectFromMusicStick_02 = wammySpeed;
+            notePrefab.effectFromMusicStick_03 = wammyEffect;
+            //currentNote.frequencyModifier = 1f + (wammyEffect * wammyIntensity);
+            //currentNote.ModifyOscillation(wammySpeed, wammyEffect);
+
+}
+        else
+        {
+
+            wammyEffect = 0;  
+            //wammyIntensity = 2f;
+            wammySpeed = Mathf.Lerp(0f, 100f, wammyEffect / wammyEffect * 100f);
+            //currentNote.frequencyModifier = 1f;
+            //currentNote.ModifyOscillation(1f, 0f);
+        }
+
         /*if (newColor != groundColor)
         {
             lastGroundColor = groundColor;

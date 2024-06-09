@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DomeTile
   - WaterPlane
+  - Note
   layers:
   - Default
   - TransparentFX

@@ -12,6 +12,7 @@ public class Note
     public double startTime;
     public double releaseTime;
     public bool beingHeld;
+    public bool dead = false;
 
     public float volPrevFrame = 0f;
     public float volBeforeRelease = 0f;

@@ -7,6 +7,22 @@ TagManager:
   - DomeTile
   - WaterPlane
   - Note
+  - IndexFinger_R
+  - ThumbFinger_R
+  - RingFinger_R
+  - MiddleFinger_R
+  - PinkyFinger_R
+  - Palm_R
+  - IndexFinger_L
+  - MiddleFinger_L
+  - ThumbFinger_L
+  - PinkyFinger_L
+  - RingFinger_L
+  - Palm_L
+  - Undefined
+  - MusicStick_R
+  - MusicStick_L
+  - HandController
   layers:
   - Default
   - TransparentFX

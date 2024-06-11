@@ -23,6 +23,9 @@ TagManager:
   - MusicStick_R
   - MusicStick_L
   - HandController
+  - DandelionPetal
+  - DandelionStem
+  - Wind
   layers:
   - Default
   - TransparentFX

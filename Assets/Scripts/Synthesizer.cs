@@ -118,6 +118,7 @@ public class Synthesizer : MonoBehaviour
             if (note.fade) volumeModifier *= 1 - timePlaying/note.holdTime;
             if (timePlaying > note.holdTime)
             {
+                note.dead = true;
                 note.Release();
             }
         }

@@ -8,6 +8,7 @@ public class MusicStick : MonoBehaviour
 
 
     public Synthesizer synthesizer;
+    public GameObject repeatingNotePrefab;
     public GlobalEffectsSynthesizer globalEffectsSynthesizer;
     public Note currentNote;
 
@@ -15,10 +16,12 @@ public class MusicStick : MonoBehaviour
     public Note[,] NoteStorageB = new Note[6, 8];
     public Note[,] NoteStorageC = new Note[6, 8];
     public Note[,] NoteStorageD = new Note[6, 8];
+    /*
     public GlobalNote[,] GlobalNoteStorageA = new GlobalNote[6, 8];
     public GlobalNote[,] GlobalNoteStorageB = new GlobalNote[6, 8];
     public GlobalNote[,] GlobalNoteStorageC = new GlobalNote[6, 8];
     public GlobalNote[,] GlobalNoteStorageD = new GlobalNote[6, 8];
+    */
     private float[,] frequencies;
 
     public Instrument instrumentA;
@@ -40,6 +43,7 @@ public class MusicStick : MonoBehaviour
 
 
     public GameObject handController;
+    public bool shouldHold;
     public bool shouldRepeat;
     public GlobalNote globalNote;
     public int repeatDuration;
@@ -100,10 +104,6 @@ public class MusicStick : MonoBehaviour
             //Debug.Log(wammyRotation + "," + wammyRotationSet);
 
             Instrument instrument;
-
-            ///////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////
 
             Note[,] storage;
             if (tileName[0].Equals('A'))
@@ -169,51 +169,37 @@ public class MusicStick : MonoBehaviour
                 //Debug.Log(colorInterval);
             }
 
-            ///////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////
-
-            GlobalNote[,] storageGlobal;
-            if (tileName[0].Equals('A'))
+            //shouldRepeat = true;
+            //shouldHold = true;
+            
+            if (shouldRepeat)
             {
+                //We can change all of the settings here
+                float noteLength = 1f;
+                float repeatTime = 1f;
 
-                instrument = instrumentA;
-                storageGlobal = GlobalNoteStorageA;
-                frequency = frequencies[octaveIndex, intervalIndex];///2092;
+                storage[octaveIndex, intervalIndex] = synthesizer.PlayNote(instrument, frequency, noteLength, true);
+                currentNote = storage[octaveIndex, intervalIndex];
 
+                RepeatingNote rNote = Instantiate(repeatingNotePrefab).GetComponent<RepeatingNote>();
+                rNote.instrument = instrument;
+                rNote.frequency = frequency;
+
+                rNote.noteLength = noteLength;
+                rNote.fadeNotes = true;
+                rNote.repeatTime = repeatTime;
+                rNote.totalTimesToRepeat = 2;
             }
-            else if (tileName[0].Equals('B'))
+            else if (shouldHold)
             {
-                instrument = instrumentB;
-                storageGlobal = GlobalNoteStorageB;
-                frequency = frequencies[octaveIndex, intervalIndex];///2092;
+                //We can change this
+                float holdTime = 3f;
 
-            }
-            else if (tileName[0].Equals('C'))
-            {
-                instrument = instrumentC;
-                storageGlobal = GlobalNoteStorageC;
-                frequency = frequencies[octaveIndex, intervalIndex];///2092;
-
-            }
-            else
-            {
-                instrument = instrumentD;
-                storageGlobal = GlobalNoteStorageD;
-                frequency = frequencies[octaveIndex, intervalIndex];///2092;
-
-
-            }
-
-            if (shouldRepeat == true)
-            {
-                storage[octaveIndex, intervalIndex] = synthesizer.PlayNote(instrument, frequency);
+                storage[octaveIndex, intervalIndex] = synthesizer.PlayNote(instrument, frequency, holdTime, true);
                 currentNote = storage[octaveIndex, intervalIndex];
             }
             else
             {
-                storageGlobal[octaveIndex, intervalIndex] = globalEffectsSynthesizer.PlayNote(instrument, frequency);
-                globalNote = storageGlobal[octaveIndex, intervalIndex];
                 storage[octaveIndex, intervalIndex] = synthesizer.PlayNote(instrument, frequency);
                 currentNote = storage[octaveIndex, intervalIndex];
             }
@@ -235,10 +221,6 @@ public class MusicStick : MonoBehaviour
 
             string tileName = col.gameObject.name;
             if (name.Substring(2).Equals("Top")) return;
-
-            ///////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////
 
             Note[,] storage;
             if (tileName[0].Equals('A'))
@@ -270,63 +252,14 @@ public class MusicStick : MonoBehaviour
                 renderer.material.SetFloat("_Instrument_D", 0.0f);
             }
 
-            ///////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////
-
-            GlobalNote[,] storageGlobal;
-            if (tileName[0].Equals('A'))
-            {
-
-                storageGlobal = GlobalNoteStorageA;
-
-            }
-            else if (tileName[0].Equals('B'))
-            {
-
-                storageGlobal = GlobalNoteStorageB;
-
-            }
-            else if (tileName[0].Equals('C'))
-            {
-
-                storageGlobal = GlobalNoteStorageC;
-
-            }
-            else
-            {
-                storageGlobal = GlobalNoteStorageD;
-
-            }
-
-            ///////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////
-            ///////////////////////////////////////////////////////////////////////////////////
-
             int num = Int32.Parse(tileName.Substring(2));
             int octaveIndex = 5 - (num / 8);
             int intervalIndex = num % 8;
 
-            if (shouldRepeat == true)
-            {
-                //repeatDuration = 3;
-                synthesizer.ReleaseNote(storage[octaveIndex, intervalIndex]);
-                StartCoroutine(NoteRepeats());
-                globalEffectsSynthesizer.ReleaseNote(storageGlobal[octaveIndex, intervalIndex]);
-                repeatDuration = 3;
-
-
-            }
-            else
-            {
-                synthesizer.ReleaseNote(storage[octaveIndex, intervalIndex]);
-                globalEffectsSynthesizer.ReleaseNote(storageGlobal[octaveIndex, intervalIndex]);
-
-            }
-
+            if (storage[octaveIndex, intervalIndex] != null) synthesizer.ReleaseNote(storage[octaveIndex, intervalIndex]);
         }
-
     }
+
     IEnumerator NoteRepeats()
     {
         handController.transform.position = Vector3.zero;
@@ -360,67 +293,69 @@ public class MusicStick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (wammyRotation != 0f)
+        if (currentNote != null)
         {
-
-            wammyRotation = 0.01f + (180f * (gameObject.transform.rotation.x / 1f));
-            wammyEffect = Mathf.Abs(wammyRotationSet - wammyRotation) / 180f;
-            wammySpeed = wammyEffect;
-            wammyIntensity = (wammyEffect + wammySpeed);
-
-
-            if (wammyRotation > 15f || wammyRotation < -15)
+            if (wammyRotation != 0f)
             {
-                currentNote.frequencyModifier = 1f + wammyIntensity;
-                currentNote.ModifyOscillation(wammySpeed, wammyEffect * 2f);
-                globalNote.frequencyModifier = 1f + wammyIntensity;
-                globalNote.ModifyOscillation(wammySpeed, wammyIntensity);
 
+                wammyRotation = 0.01f + (180f * (gameObject.transform.rotation.x / 1f));
+                wammyEffect = Mathf.Abs(wammyRotationSet - wammyRotation) / 180f;
+                wammySpeed = wammyEffect;
+                wammyIntensity = (wammyEffect + wammySpeed);
+
+
+                if (wammyRotation > 15f || wammyRotation < -15)
+                {
+                    currentNote.frequencyModifier = 1f + wammyIntensity;
+                    currentNote.ModifyOscillation(wammySpeed, wammyEffect * 2f);
+                    //globalNote.frequencyModifier = 1f + wammyIntensity;
+                    //globalNote.ModifyOscillation(wammySpeed, wammyIntensity);
+
+                }
+                else
+                {
+                    currentNote.frequencyModifier = 1f;
+                    currentNote.ModifyOscillation(1f, 0f);
+                    //globalNote.frequencyModifier = 1f;// + wammyIntensity;
+                    //globalNote.ModifyOscillation(1f, 0f);
+
+                    //Debug.Log("wammyRotation: " + wammyRotation + ", wammyIntensity: " + wammyIntensity + ", wammyEffect: " + wammyEffect +", wammyIntensity: " + wammySpeed);
+                    //notePrefab.effectFromMusicStick_01 = 1f + (wammyEffect * wammyIntensity);
+                    //notePrefab.effectFromMusicStick_02 = wammySpeed;
+                    //notePrefab.effectFromMusicStick_03 = wammyEffect;
+                    //currentNote.frequencyModifier = 1f + (wammyEffect * wammyIntensity);
+                    //currentNote.ModifyOscillation(wammySpeed, wammyEffect);
+
+                }
             }
             else
             {
-                currentNote.frequencyModifier = 1f;
-                currentNote.ModifyOscillation(1f, 0f);
-                globalNote.frequencyModifier = 1f;// + wammyIntensity;
-                globalNote.ModifyOscillation(1f, 0f);
+                //resets all the wammy effects
 
-                //Debug.Log("wammyRotation: " + wammyRotation + ", wammyIntensity: " + wammyIntensity + ", wammyEffect: " + wammyEffect +", wammyIntensity: " + wammySpeed);
-                //notePrefab.effectFromMusicStick_01 = 1f + (wammyEffect * wammyIntensity);
-                //notePrefab.effectFromMusicStick_02 = wammySpeed;
-                //notePrefab.effectFromMusicStick_03 = wammyEffect;
-                //currentNote.frequencyModifier = 1f + (wammyEffect * wammyIntensity);
-                //currentNote.ModifyOscillation(wammySpeed, wammyEffect);
+                wammyEffect = 0f;
+                wammyIntensity = 2f;
+                wammySpeed = 0f;
+
+                //currentNote.frequencyModifier = 1f;
+                //currentNote.ModifyOscillation(1f, 0f);
+
+
+                /*if (newColor != groundColor)
+                {
+                    lastGroundColor = groundColor;
+                    groundColor = newColor;
+                    groundColorSpeedChange = Mathf.Abs(groundColor - lastGroundColor);
+                    currentGroundColor = Mathf.Lerp(lastGroundColor, groundColor, Time.deltaTime/groundColorSpeedChange);
+                    Renderer groundRenderer = lumpyTerrain.GetComponent<Renderer>();
+                    groundRenderer.material.SetFloat("_GroundColor", currentGroundColor);
+
+                    Debug.Log(currentGroundColor);
+
+                }*/
+
+
 
             }
-        }
-        else
-        {
-            //resets all the wammy effects
-
-            wammyEffect = 0f;
-            wammyIntensity = 2f;
-            wammySpeed = 0f;
-
-            //currentNote.frequencyModifier = 1f;
-            //currentNote.ModifyOscillation(1f, 0f);
-
-
-            /*if (newColor != groundColor)
-            {
-                lastGroundColor = groundColor;
-                groundColor = newColor;
-                groundColorSpeedChange = Mathf.Abs(groundColor - lastGroundColor);
-                currentGroundColor = Mathf.Lerp(lastGroundColor, groundColor, Time.deltaTime/groundColorSpeedChange);
-                Renderer groundRenderer = lumpyTerrain.GetComponent<Renderer>();
-                groundRenderer.material.SetFloat("_GroundColor", currentGroundColor);
-
-                Debug.Log(currentGroundColor);
-
-            }*/
-
-
-
         }
     }
 }
